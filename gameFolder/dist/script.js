@@ -1,5 +1,6 @@
 var hero = document.querySelector('.hero');
 var map = document.querySelector('.map');
+var map = map.getContext("2d");
 var mapWidth = map.offsetWidth;
 var mapHeight = map.offsetHeight;
 var heroX = 200; // Initial X position

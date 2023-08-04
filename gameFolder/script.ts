@@ -1,6 +1,8 @@
 
 const hero = document.querySelector('.hero');
 const map = document.querySelector('.map');
+let map=map.getContext("2d");
+
 
 const mapWidth = map.offsetWidth;
 const mapHeight = map.offsetHeight;
