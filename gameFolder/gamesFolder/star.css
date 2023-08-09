@@ -1,0 +1,177 @@
+:root {
+    --star-size: 5rem;
+}
+
+body {
+    margin: 0;
+    background: #fcfcfc;
+    font-family: Arial, sans-serif;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-height: 100vh;
+}
+.video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1; /* Ensure the video is behind other elements */
+}
+
+.video-background video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+header {
+    background-color: #030303;
+	border-radius: 50%;
+	box-shadow: 0 1.5rem 6rem rgba(194, 156, 7, 0.3); /* Yellow shadow */
+    color: white;
+    font-size: 3rem;
+    padding: 3rem;
+	margin: 2.5rem;
+    text-align: center;
+	animation: fallDown 3s forwards, addShadow 2s 2s forwards infinite /* Add the animations */
+}
+
+@keyframes fallDown {
+    from {
+        transform: translateY(-50rem); /* Start position above */
+        opacity: 0; /* Start with opacity 0 */
+    }
+    to {
+        transform: translateY(0); /* End position at original place */
+        opacity: 1; /* End with opacity 1 */
+    }
+}
+.blinking-lights {
+    position: absolute;
+    bottom: -20px; /* Position lights below the header */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 15rem;
+    height:0.5rem;
+	border-radius: 50%;
+    background-color: #fb0834;
+    animation: blinkLights 3s infinite;
+}
+
+@keyframes blinkLights {
+    0%, 100% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+/* First blinking light */
+.blinking-lights {
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 15rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background-color: #fb0834;
+    animation: blinkLights 3s infinite, moveRight 5s infinite, moveLeft 6s infinite;
+}
+
+/* Second blinking light */
+.blinking-lights-2 {
+    position: absolute;
+    bottom: -30px;
+    left: 20%;
+    transform: translateX(-50%);
+    width: 10rem;
+    height: 0.3rem;
+    border-radius: 50%;
+    background-color: #adc417;
+    animation: blinkLights 4s infinite, moveRight 6s infinite, moveLeft 5s infinite;
+}
+
+/* Third blinking light */
+.blinking-lights-3 {
+    position: absolute;
+    bottom: -25px;
+    left: 80%;
+    transform: translateX(-50%);
+    width: 12rem;
+    height: 0.4rem;
+    border-radius: 50%;
+    background-color: #ffea00;
+    animation: blinkLights 3.5s infinite, moveRight 10s infinite, moveLeft 5s infinite;
+}
+
+@keyframes blinkLights {
+    0%, 100% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+@keyframes moveRight {
+    0% {
+        transform: translateX(-50%);
+    }
+    100% {
+        transform: translateX(50%);
+    }
+}
+
+@keyframes moveLeft {
+    0% {
+        transform: translateX(50%);
+    }
+    100% {
+        transform: translateX(-70%);
+    }
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+}
+
+.star-rating {
+    margin: 1 rem;
+}
+
+.star-rating .star {
+    color: #dab008;
+    font-size: var(--star-size);
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+	box-shadow: 0 4px 6px rgba(255, 204, 0, 0.3); /* Default yellow shadow */
+
+}
+
+.star-rating .star:hover {
+	color: green;
+    transform: scale(1.2);
+	box-shadow: 0 4px 6px rgba(148, 0, 211, 0.5); /* Purple shadow on hover */
+
+}
+
+.star-rating .star .star-icon:before {
+    content: "\2605"; /* Unicode character for a filled star */
+}
+
+.rating-message {
+    font-size: 2rem;
+    color: #fffcfc;
+	margin-top: 10px;
+}

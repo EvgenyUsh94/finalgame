@@ -1,0 +1,41 @@
+{
+    "Snake": {
+      "constructor": {
+        "x": "number",
+        "y": "number",
+        "size": "number"
+      },
+      "moveBy": {},
+      "tail": [
+        {
+          "x": "number",
+          "y": "number"
+        }
+      ],
+      "rotateX": "number",
+      "rotateY": "number"
+    },
+    "Apple": {
+      "constructor": {},
+      "x": "number",
+      "y": "number",
+      "color": "string",
+      "size": "number"
+    },
+    "canvas": "object",
+    "snake": "Snake",
+    "apple": "Apple",
+    "canvasContext": "object",
+    "gameLoop": {},
+    "show": {},
+    "update": {},
+    "checkHitWall": {},
+    "eatApple": {},
+    "draw": {},
+    "createRect": {},
+    "window": {
+      "addEventListener": {},
+      "onload": {}
+    }
+  }
+  

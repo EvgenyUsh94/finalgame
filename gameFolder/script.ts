@@ -40,115 +40,172 @@ const collisions= [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
+  const canvas = document.querySelector('canvas');
+  const context = canvas.getContext('2d');
+  
+  canvas.width = 1024;
+  canvas.height = 576;
 
-const canvas = document.querySelector('canvas');
-const context = canvas.getContext('2d');
+    //NPC's
+  const npc = {
+    x: 800,
+    y: 250,
+    image: './images/world/player/playerUp.png',
+    isInteracting: false,
+  };
 
-canvas.width = 1024;
-canvas.height = 576;
+  const npc2 = {
+    x: 1150,  // Set the initial x position
+    y: 250,  // Set the initial y position
+    image: './images/world/player/playerdown.png', // NPC image URL
+    isInteracting: false, // Flag to track interaction
+  };
+  
+  const npcImage = new Image();
+  npcImage.src = npc.image;
+  
+  const npcImage2 = new Image();
+  npcImage2.src = npc2.image;
+  
 
-  const collisionsMap = []
-for (let i=0; i<collisions.length; i+=70){
-  collisionsMap.push(collisions.slice(i,70 + i))
-}
-
-
-
-const zoomFactor = 1.6;
-const scaledWidth = canvas.width * zoomFactor;
-const scaledHeight = canvas.height * zoomFactor;
-
-const world = new Image();
-world.src = './images/world/world.jpeg';
-
-let playerX = canvas.width / 2 - 24; // 24 is the half of playerImage.width/8
-let playerY = canvas.height / 2 - 32; // 32 is the half of playerImage.height
-
-const playerSpeed = 5;
-let playerDirection = 'down'; // Initial player direction
-
-function drawMap() {
-  context?.save();
-  context?.clearRect(0, 0, canvas.width, canvas.height);
-
-  const mapOffsetX = canvas.width / 2 - playerX - 24; // 24 is the half of playerImage.width/8
-  const mapOffsetY = canvas.height / 2 - playerY - 32; // 32 is the half of playerImage.height
-
-  context?.translate(mapOffsetX, mapOffsetY);
-  context?.scale(zoomFactor, zoomFactor);
-  context?.drawImage(world, -10 / zoomFactor, -750 / zoomFactor, scaledWidth, scaledHeight);
-  context?.restore();
-}
-
-const playerImages = {
-  up: './images/world/player/playerUp.png',
-  down: './images/world/player/playerDown.png',
-  left: './images/world/player/playerLeft.png',
-  right: './images/world/player/playerRight.png',
-};
-
-let playerImage = new Image();
-playerImage.src = playerImages[playerDirection]; // Set the initial player image
-
-const playerFrames = 4; // The total number of frames in the player sprite
-
-let playerFrame = 0; // Current frame of the player sprite
-let frameCount = 0; // Counter to control animation speed
-
-const playerScale = 0.6; // Adjust this value to make the player smaller
-
-function animate() {
-  window.requestAnimationFrame(animate);
-  drawMap();
-  context?.drawImage(
-    playerImage,
-    playerFrame * (playerImage.width / playerFrames),
-    0,
-    playerImage.width / playerFrames,
-    playerImage.height,
-    canvas.width / 2 - (playerImage.width / (playerFrames * 2)) * playerScale, // Adjust the X position for centered drawing and scale
-    canvas.height / 2 - playerImage.height / 2 * playerScale, // Scale the Y position too
-    (playerImage.width / playerFrames) * zoomFactor * playerScale, // Scale the width
-    playerImage.height * zoomFactor * playerScale // Scale the height
-  );
-
-  // Update playerFrame to loop through the frames
-  if (frameCount % 8 === 0) {
-    playerFrame = (playerFrame + 1) % playerFrames;
+  
+  const zoomFactor = 1.6;
+  const scaledWidth = canvas.width * zoomFactor;
+  const scaledHeight = canvas.height * zoomFactor;
+  
+  const world = new Image();
+  world.src = './images/world/world.jpeg';
+  
+  let playerX = canvas.width / 2 - 24;
+  let playerY = canvas.height / 2 - 32;
+  const playerSpeed = 5;
+  let playerDirection = 'down';
+  
+  function drawMap() {
+    context?.save();
+    context?.clearRect(0, 0, canvas.width, canvas.height);
+  
+    const mapOffsetX = canvas.width / 2 - playerX - 24;
+    const mapOffsetY = canvas.height / 2 - playerY - 32;
+  
+    context?.translate(mapOffsetX, mapOffsetY);
+    context?.scale(zoomFactor, zoomFactor);
+    context?.drawImage(world, -10 / zoomFactor, -750 / zoomFactor, scaledWidth, scaledHeight);
+    context?.restore();
   }
-  frameCount++;
-}
-
-animate();
-
-window.addEventListener('keydown', (ev) => {
-  switch (ev.key) {
-    case 'w':
-      playerY -= playerSpeed;
-      playerDirection = 'up';
-      break;
-    case 'a':
-      playerX -= playerSpeed;
-      playerDirection = 'left';
-      break;
-    case 's':
-      playerY += playerSpeed;
-      playerDirection = 'down';
-      break;
-    case 'd':
-      playerX += playerSpeed;
-      playerDirection = 'right';
-      break;
-  }
-
-  // Load the corresponding player image based on the direction
-  playerImage = new Image();
+  
+  const playerImages = {
+    up: './images/world/player/playerUp.png',
+    down: './images/world/player/playerDown.png',
+    left: './images/world/player/playerLeft.png',
+    right: './images/world/player/playerRight.png',
+  };
+  
+  let playerImage = new Image();
   playerImage.src = playerImages[playerDirection];
-});
+  
+  const playerFrames = 4;
+  let playerFrame = 0;
+  let frameCount = 0;
+  const playerScale = 0.6;
+  
+  function animate() {
+    window.requestAnimationFrame(animate);
+  
+    const mapOffsetX = canvas.width / 2 - playerX - 24;
+    const mapOffsetY = canvas.height / 2 - playerY - 32;
+    
+    context?.save();
+    context?.clearRect(0, 0, canvas.width, canvas.height);
+    
+    context?.translate(mapOffsetX, mapOffsetY);
+    context?.scale(zoomFactor, zoomFactor);
+    context?.drawImage(world, -10 / zoomFactor, -750 / zoomFactor, scaledWidth, scaledHeight);
+    context?.restore();
+    
+    //distance NPC1
+    const dx = playerX - npc.x;
+    const dy = playerY - npc.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
 
+    if (distance < 50) {
+      npc.isInteracting = true; 
+    } else {
+      npc.isInteracting = false;
+    }
+    //distance NPC2
+    const dx2 = playerX - npc2.x;
+    const dy2 = playerY - npc2.y;
+    const distance2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
 
+    if (distance2 < 50) {
+      npc2.isInteracting = true;
+    } else {
+      npc2.isInteracting = false;
+    }
+  
+    context?.drawImage(npcImage2, npc2.x + mapOffsetX, npc2.y + mapOffsetY);
+    context?.drawImage(npcImage, npc.x + mapOffsetX, npc.y + mapOffsetY);
+  
+    context?.drawImage(
+      playerImage,
+      playerFrame * (playerImage.width / playerFrames),
+      0,
+      playerImage.width / playerFrames,
+      playerImage.height,
+      canvas.width / 2 - (playerImage.width / (playerFrames * 2)) * playerScale,
+      canvas.height / 2 - playerImage.height / 2 * playerScale,
+      (playerImage.width / playerFrames) * zoomFactor * playerScale,
+      playerImage.height * zoomFactor * playerScale
+    );
+  
+    if (frameCount % 8 === 0) {
+      playerFrame = (playerFrame + 1) % playerFrames;
+    }
+    frameCount++;
+  }
+  
+  animate();
+  
+  window.addEventListener('keydown', (ev) => {
+    switch (ev.key) {
+      case 'w':
+        playerY -= playerSpeed;
+        playerDirection = 'up';
+        break;
+      case 'a':
+        playerX -= playerSpeed;
+        playerDirection = 'left';
+        break;
+      case 's':
+        playerY += playerSpeed;
+        playerDirection = 'down';
+        break;
+      case 'd':
+        playerX += playerSpeed;
+        playerDirection = 'right';
+        break;
+      case 'e':
+        if (npc.isInteracting) {
+          interactionMessage.textContent = 'Hello, adventurer!';
+          window.location.href = "./gamesFolder/snake.html";
+        }
+        if (npc2.isInteracting) {
+          interactionMessage.textContent = 'Hello, adventurer!';
+          window.location.href = "./gamesFolder2/index.html";
+        }
+        break;
+    }
+    playerImage = new Image();
+    playerImage.src = playerImages[playerDirection];
+  });
+  
 
-
+  
+  const interactionMessage = document.createElement('div');
+  interactionMessage.className = 'interaction-message';
+  interactionMessage.textContent = 'Press E to interact';
+  document.body.appendChild(interactionMessage);
 
 
 

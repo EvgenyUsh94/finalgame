@@ -42,24 +42,37 @@ var canvas = document.querySelector('canvas');
 var context = canvas.getContext('2d');
 canvas.width = 1024;
 canvas.height = 576;
-var collisionsMap = [];
-for (var i = 0; i < collisions.length; i += 70) {
-    collisionsMap.push(collisions.slice(i, 70 + i));
-}
+//NPC's
+var npc = {
+    x: 800,
+    y: 250,
+    image: './images/world/player/playerUp.png',
+    isInteracting: false
+};
+var npc2 = {
+    x: 1150,
+    y: 250,
+    image: './images/world/player/playerdown.png',
+    isInteracting: false
+};
+var npcImage = new Image();
+npcImage.src = npc.image;
+var npcImage2 = new Image();
+npcImage2.src = npc2.image;
 var zoomFactor = 1.6;
 var scaledWidth = canvas.width * zoomFactor;
 var scaledHeight = canvas.height * zoomFactor;
 var world = new Image();
 world.src = './images/world/world.jpeg';
-var playerX = canvas.width / 2 - 24; // 24 is the half of playerImage.width/8
-var playerY = canvas.height / 2 - 32; // 32 is the half of playerImage.height
+var playerX = canvas.width / 2 - 24;
+var playerY = canvas.height / 2 - 32;
 var playerSpeed = 5;
-var playerDirection = 'down'; // Initial player direction
+var playerDirection = 'down';
 function drawMap() {
     context === null || context === void 0 ? void 0 : context.save();
     context === null || context === void 0 ? void 0 : context.clearRect(0, 0, canvas.width, canvas.height);
-    var mapOffsetX = canvas.width / 2 - playerX - 24; // 24 is the half of playerImage.width/8
-    var mapOffsetY = canvas.height / 2 - playerY - 32; // 32 is the half of playerImage.height
+    var mapOffsetX = canvas.width / 2 - playerX - 24;
+    var mapOffsetY = canvas.height / 2 - playerY - 32;
     context === null || context === void 0 ? void 0 : context.translate(mapOffsetX, mapOffsetY);
     context === null || context === void 0 ? void 0 : context.scale(zoomFactor, zoomFactor);
     context === null || context === void 0 ? void 0 : context.drawImage(world, -10 / zoomFactor, -750 / zoomFactor, scaledWidth, scaledHeight);
@@ -72,20 +85,44 @@ var playerImages = {
     right: './images/world/player/playerRight.png'
 };
 var playerImage = new Image();
-playerImage.src = playerImages[playerDirection]; // Set the initial player image
-var playerFrames = 4; // The total number of frames in the player sprite
-var playerFrame = 0; // Current frame of the player sprite
-var frameCount = 0; // Counter to control animation speed
-var playerScale = 0.6; // Adjust this value to make the player smaller
+playerImage.src = playerImages[playerDirection];
+var playerFrames = 4;
+var playerFrame = 0;
+var frameCount = 0;
+var playerScale = 0.6;
 function animate() {
     window.requestAnimationFrame(animate);
-    drawMap();
-    context === null || context === void 0 ? void 0 : context.drawImage(playerImage, playerFrame * (playerImage.width / playerFrames), 0, playerImage.width / playerFrames, playerImage.height, canvas.width / 2 - (playerImage.width / (playerFrames * 2)) * playerScale, // Adjust the X position for centered drawing and scale
-    canvas.height / 2 - playerImage.height / 2 * playerScale, // Scale the Y position too
-    (playerImage.width / playerFrames) * zoomFactor * playerScale, // Scale the width
-    playerImage.height * zoomFactor * playerScale // Scale the height
-    );
-    // Update playerFrame to loop through the frames
+    var mapOffsetX = canvas.width / 2 - playerX - 24;
+    var mapOffsetY = canvas.height / 2 - playerY - 32;
+    context === null || context === void 0 ? void 0 : context.save();
+    context === null || context === void 0 ? void 0 : context.clearRect(0, 0, canvas.width, canvas.height);
+    context === null || context === void 0 ? void 0 : context.translate(mapOffsetX, mapOffsetY);
+    context === null || context === void 0 ? void 0 : context.scale(zoomFactor, zoomFactor);
+    context === null || context === void 0 ? void 0 : context.drawImage(world, -10 / zoomFactor, -750 / zoomFactor, scaledWidth, scaledHeight);
+    context === null || context === void 0 ? void 0 : context.restore();
+    //distance NPC1
+    var dx = playerX - npc.x;
+    var dy = playerY - npc.y;
+    var distance = Math.sqrt(dx * dx + dy * dy);
+    if (distance < 50) {
+        npc.isInteracting = true;
+    }
+    else {
+        npc.isInteracting = false;
+    }
+    //distance NPC2
+    var dx2 = playerX - npc2.x;
+    var dy2 = playerY - npc2.y;
+    var distance2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+    if (distance2 < 50) {
+        npc2.isInteracting = true;
+    }
+    else {
+        npc2.isInteracting = false;
+    }
+    context === null || context === void 0 ? void 0 : context.drawImage(npcImage2, npc2.x + mapOffsetX, npc2.y + mapOffsetY);
+    context === null || context === void 0 ? void 0 : context.drawImage(npcImage, npc.x + mapOffsetX, npc.y + mapOffsetY);
+    context === null || context === void 0 ? void 0 : context.drawImage(playerImage, playerFrame * (playerImage.width / playerFrames), 0, playerImage.width / playerFrames, playerImage.height, canvas.width / 2 - (playerImage.width / (playerFrames * 2)) * playerScale, canvas.height / 2 - playerImage.height / 2 * playerScale, (playerImage.width / playerFrames) * zoomFactor * playerScale, playerImage.height * zoomFactor * playerScale);
     if (frameCount % 8 === 0) {
         playerFrame = (playerFrame + 1) % playerFrames;
     }
@@ -110,11 +147,24 @@ window.addEventListener('keydown', function (ev) {
             playerX += playerSpeed;
             playerDirection = 'right';
             break;
+        case 'e':
+            if (npc.isInteracting) {
+                interactionMessage.textContent = 'Hello, adventurer!';
+                window.location.href = "./gamesFolder/snake.html";
+            }
+            if (npc2.isInteracting) {
+                interactionMessage.textContent = 'Hello, adventurer!';
+                window.location.href = "./gamesFolder2/index.html";
+            }
+            break;
     }
-    // Load the corresponding player image based on the direction
     playerImage = new Image();
     playerImage.src = playerImages[playerDirection];
 });
+var interactionMessage = document.createElement('div');
+interactionMessage.className = 'interaction-message';
+interactionMessage.textContent = 'Press E to interact';
+document.body.appendChild(interactionMessage);
 // const blockers=document.querySelector('.blockers')
 // const mapWidth = map.offsetWidth;
 // const mapHeight = map.offsetHeight;
