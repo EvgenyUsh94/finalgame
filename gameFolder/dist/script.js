@@ -46,24 +46,6 @@ var collisionsMap = [];
 for (var i = 0; i < collisions.length; i += 70) {
     collisionsMap.push(collisions.slice(i, 70 + i));
 }
-var Boundary = /** @class */ (function () {
-    function Boundary(position) {
-        this.position = position;
-        this.position = position;
-        this.width = Boundary.width;
-        this.height = Boundary.height;
-    }
-    Boundary.prototype.draw = function () {
-        if (context) {
-            context.fillStyle = 'red';
-            context.fillRect(this.position.x, this.position.y, this.width, this.height);
-        }
-    };
-    Boundary.width = 48;
-    Boundary.height = 48;
-    return Boundary;
-}());
-var Boundaries = [];
 var zoomFactor = 1.6;
 var scaledWidth = canvas.width * zoomFactor;
 var scaledHeight = canvas.height * zoomFactor;
@@ -98,9 +80,6 @@ var playerScale = 0.6; // Adjust this value to make the player smaller
 function animate() {
     window.requestAnimationFrame(animate);
     drawMap();
-    Boundaries.forEach(function (Boundary) {
-        Boundary.draw();
-    });
     context === null || context === void 0 ? void 0 : context.drawImage(playerImage, playerFrame * (playerImage.width / playerFrames), 0, playerImage.width / playerFrames, playerImage.height, canvas.width / 2 - (playerImage.width / (playerFrames * 2)) * playerScale, // Adjust the X position for centered drawing and scale
     canvas.height / 2 - playerImage.height / 2 * playerScale, // Scale the Y position too
     (playerImage.width / playerFrames) * zoomFactor * playerScale, // Scale the width

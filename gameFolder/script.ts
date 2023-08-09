@@ -52,26 +52,6 @@ for (let i=0; i<collisions.length; i+=70){
   collisionsMap.push(collisions.slice(i,70 + i))
 }
 
-class Boundary {
-  static width = 48;
-  static height = 48;
-
-  constructor(public position) {
-    this.position = position;
-    this.width = Boundary.width;
-    this.height = Boundary.height;
-  }
-
-  draw() {
-    if (context) {
-      context.fillStyle = 'red';
-      context.fillRect(this.position.x, this.position.y, this.width, this.height);
-    }
-  }
-}
-
-const Boundaries = [];
-
 
 
 const zoomFactor = 1.6;
@@ -120,9 +100,6 @@ const playerScale = 0.6; // Adjust this value to make the player smaller
 function animate() {
   window.requestAnimationFrame(animate);
   drawMap();
-  Boundaries.forEach(Boundary=>{
-    Boundary.draw()
-  })
   context?.drawImage(
     playerImage,
     playerFrame * (playerImage.width / playerFrames),
